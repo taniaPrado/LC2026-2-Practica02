@@ -36,27 +36,27 @@ variables prop = varsAux prop []
     varsAux :: Prop -> [String] -> [String]
     varsAux (Var x) collector
         | include x collector = collector
-        | otherwise = collector ++ [x]
+        | otherwise = x : collector
     varsAux (Cons _) collector = collector
     varsAux (Not f) collector  = varsAux f collector
-    varsAux (And f g) collector = varsAux g (varsAux f collector )
-    varsAux (Or  f g) collector = varsAux g (varsAux f collector)
-    varsAux (Impl f g) collector = varsAux g (varsAux f collector)
-    varsAux (Syss f g) collector = varsAux g (varsAux f collector)
+    varsAux (And f g) collector = varsAux f (varsAux g collector)
+    varsAux (Or  f g) collector = varsAux f (varsAux g collector)
+    varsAux (Impl f g) collector = varsAux f (varsAux g collector)
+    varsAux (Syss f g) collector = varsAux f (varsAux g collector)
 
 --Ejercicio 2
 interpretacion :: Prop -> Estado -> Bool
 interpretacion (Cons a) _ = a
 interpretacion (Var x) list = include x list
 interpretacion (Not prop) list = not (interpretacion prop list)
-interpretacion (And x y) list = (interpretacion y list) && (interpretacion x list)
+interpretacion (And x y) list = (interpretacion x list) && (interpretacion y list)
 interpretacion (Or x y) list = (interpretacion x list) || (interpretacion y list) 
 interpretacion (Impl x y) list = (interpretacion (Not x) list) || (interpretacion y list)
 interpretacion (Syss x y) list = (interpretacion x list) == (interpretacion y list)
 
 --Ejercicio 3
 estadosPosibles :: Prop -> [Estado]
-estadosPosibles prop = conjuntoPotencia (variables prop)
+estadosPosibles prop = conjPotencia (variables prop)
 
 --Ejercicio 4
 modelos :: Prop -> [Estado]
@@ -88,10 +88,9 @@ tautologia p = sonEquivalentes p (Cons True)
 
 --Ejercicio 7
 contradiccion :: Prop -> Bool
-contradiccion = undefine
+contradiccion p = modelos p == []
 
 --Ejercicio 8
-consecuenciaLogica :: [Prop] -> Prop -> Bool
 consecuenciaLogica :: [Prop] -> Prop -> Bool
 consecuenciaLogica props prop = verifica prop (modelos (conjunciones props)) 
     where
@@ -115,6 +114,6 @@ conjPotencia (x:xs) = [(x:ys) | ys <- conjPotencia xs] ++ conjPotencia xs
 
 include :: (Eq a) => a -> [a] -> Bool
 include _ [] = False
-include elem (head : sublist)
-    | elem == head = True
-    | otherwise    = include elem sublist
+include elem (x:xs)
+    | elem == x = True
+    | otherwise = include elem xs
