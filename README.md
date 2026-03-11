@@ -22,12 +22,10 @@ Si no les llegan a funcionar, es posible que el problema es que tengan una versi
 
 En esta sección deben eliminar esta línea de texto, borrar la leyenda "Integrante n" y escribir su nombre empezando por apellidos y su número de cuenta.
 
-+ Integrante 1
-    - No. de Cuenta: 
-+ Integrante 2
-    - No. de Cuenta: 
-+ Integrante 3
-    - No. de Cuenta: 
++ Carranza Bolaños Jatniel 
+    - 317167812
++ Bastida Prado Tania Araceli
+    - 321091086
 
 ## Comentarios
 
